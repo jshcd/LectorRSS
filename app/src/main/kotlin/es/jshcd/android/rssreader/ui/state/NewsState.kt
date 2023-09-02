@@ -4,5 +4,5 @@ import es.jshcd.android.rssreader.dto.NewsDto
 
 data class NewsState(
     val newsDtos: List<NewsDto>,
-    val focusedImage: String? = null
+    val focusedNews: Int = -1
 )

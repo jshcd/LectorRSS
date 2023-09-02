@@ -15,7 +15,9 @@ import androidx.navigation.compose.rememberNavController
 import com.android.volley.toolbox.Volley
 import es.jshcd.android.rssreader.ui.ACTION_SETTINGS
 import es.jshcd.android.rssreader.ui.ROUTE_MAIN
+import es.jshcd.android.rssreader.ui.ROUTE_PHOTO
 import es.jshcd.android.rssreader.ui.ROUTE_SETTINGS
+import es.jshcd.android.rssreader.ui.screen.PhotoScreen
 import es.jshcd.android.rssreader.ui.screen.RSSReaderMain
 import es.jshcd.android.rssreader.ui.screen.SettingsScreen
 import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
@@ -38,44 +40,38 @@ class MainActivity : ComponentActivity() {
             val settingsUiState = settingsViewModel.uiState.collectAsState()
             val navController = rememberNavController()
 
-            NavHost(
-                navController = navController,
-                startDestination = ROUTE_MAIN
-            ) {
-                composable(ROUTE_SETTINGS) {
-                    RSSReaderTheme {
-                        SettingsScreen(
-                            state = settingsUiState.value,
-                            onValueChange = {
-                                settingsViewModel.updateSetting(it)
+            RSSReaderTheme {
+                NavHost(
+                    navController = navController,
+                    startDestination = ROUTE_MAIN
+                ) {
+                    composable(ROUTE_MAIN) {
+                        newsViewModel.updateNews(
+                            isNetworkAvailable = isNetworkAvailable(),
+                            lFeedUrl = settingsUiState.value.dataSource,
+                            lQueue = requestQueue,
+                            onNoNetworkAvailable = {
+                                Toast.makeText(
+                                    applicationContext,
+                                    applicationContext.resources.getString(R.string.no_network_connection),
+                                    Toast.LENGTH_LONG
+                                ).show()
                             },
-                            onArrowBackClick = { navController.navigateUp() }
+                            onRequestError = {
+                                Toast.makeText(
+                                    applicationContext,
+                                    getString(
+                                        R.string.request_failed,
+                                        it.networkResponse.toString()
+                                    ),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         )
-                    }
-                }
-                composable(ROUTE_MAIN) {
-
-                    newsViewModel.updateNews(
-                        isNetworkAvailable = isNetworkAvailable(),
-                        lFeedUrl = settingsUiState.value.dataSource,
-                        lQueue = requestQueue,
-                        onNoNetworkAvailable = {
-                            Toast.makeText(
-                                applicationContext, applicationContext.resources.getString(R.string.no_network_connection),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        },
-                        onRequestError = {
-                            Toast.makeText(applicationContext, getString(R.string.request_failed, it.networkResponse.toString()), Toast.LENGTH_LONG).show()
-                        }
-                    )
-
-                    RSSReaderTheme {
                         RSSReaderMain(
                             headlines = newsUiState.value.newsDtos,
-                            focusedImage = newsUiState.value.focusedImage,
                             onActionButtonClick = {
-                                when(it) {
+                                when (it) {
                                     ACTION_SETTINGS -> navController.navigate(ROUTE_SETTINGS)
                                 }
                             },
@@ -84,7 +80,10 @@ class MainActivity : ComponentActivity() {
                                     link = link,
                                     onShareIntentReady = { shareIntent ->
                                         applicationContext.startActivity(
-                                            Intent.createChooser(shareIntent, getString(R.string.share_link_using)).addFlags(
+                                            Intent.createChooser(
+                                                shareIntent,
+                                                getString(R.string.share_link_using)
+                                            ).addFlags(
                                                 Intent.FLAG_ACTIVITY_NEW_TASK
                                             )
                                         )
@@ -95,11 +94,33 @@ class MainActivity : ComponentActivity() {
                                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
                                 startActivity(browserIntent)
                             },
-                            onImageClick = { imageUri ->
-                                newsViewModel.updateFocusedImage(imageUri)
+                            onImageClick = {
+                                newsViewModel.updateFocusedImage(it)
+                                navController.navigate(ROUTE_PHOTO)
+                            }
+                        )
+                    }
+                    composable(ROUTE_PHOTO) {
+                        val focusedIndex = newsUiState.value.focusedNews
+                        if (focusedIndex >= 0) {
+                            PhotoScreen(
+                                focusedImageTitle = newsUiState.value.newsDtos[focusedIndex].title,
+                                focusedImage = newsUiState.value.newsDtos[focusedIndex].imageUrl,
+                                onArrowBackClick = {
+                                    newsViewModel.updateFocusedImage(-1)
+                                    navController.navigateUp()
+                                }
+                            )
+                        }
+                    }
+                    composable(ROUTE_SETTINGS) {
+                        SettingsScreen(
+                            state = settingsUiState.value,
+                            onValueChange = {
+                                settingsViewModel.updateSetting(it)
                             },
-                            onCloseImageClick = {
-                                newsViewModel.updateFocusedImage(null)
+                            onArrowBackClick = {
+                                navController.navigateUp()
                             }
                         )
                     }

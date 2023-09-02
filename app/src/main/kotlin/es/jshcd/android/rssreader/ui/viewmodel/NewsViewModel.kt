@@ -140,9 +140,9 @@ class NewsViewModel: ViewModel() {
         onShareIntentReady(shareIntent)
     }
 
-    fun updateFocusedImage(imageUri: String?) {
+    fun updateFocusedImage(focusedIndex: Int) {
         viewModelScope.launch {
-            _uiState.emit(uiState.value.copy(focusedImage = imageUri))
+            _uiState.emit(uiState.value.copy(focusedNews = focusedIndex))
         }
     }
 }

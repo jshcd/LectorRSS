@@ -32,7 +32,7 @@ fun HeadlineRow(
     headline: NewsDto,
     onShareButtonClick: (String) -> Unit,
     onHeadlineClick: (String) -> Unit,
-    onImageClick: (String) -> Unit
+    onImageClick: (Int) -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -54,7 +54,7 @@ fun HeadlineRow(
                 } else {
                     AsyncImage(
                         modifier = Modifier.clickable(
-                            onClick = { onImageClick(headline.imageUrl) }
+                            onClick = { onImageClick(headline.id) }
                         ),
                         model = headline.imageUrl,
                         contentDescription = "Image referring to the news",

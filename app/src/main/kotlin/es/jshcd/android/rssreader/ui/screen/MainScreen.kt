@@ -36,12 +36,10 @@ import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 @Composable
 fun RSSReaderMain(
     headlines: List<NewsDto>,
-    focusedImage: String?,
     onActionButtonClick: (String) -> Unit,
     onShareButtonClick: (String) -> Unit,
     onHeadlineClick: (String) -> Unit,
-    onImageClick: (String) -> Unit,
-    onCloseImageClick: () -> Unit
+    onImageClick: (Int) -> Unit
 ) {
     val borderPadding = 5.dp
 
@@ -84,32 +82,6 @@ fun RSSReaderMain(
                             onShareButtonClick = onShareButtonClick,
                             onHeadlineClick = onHeadlineClick,
                             onImageClick = onImageClick
-                        )
-                    }
-                }
-                focusedImage?.let {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color.White),
-                        verticalArrangement = Arrangement.Center
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = stringResource(id = R.string.close))
-                            IconButton(
-                                onClick = onCloseImageClick
-                            ) {
-                                Icon(imageVector = Icons.Default.Close, contentDescription = "Close image")
-                            }
-                        }
-                        AsyncImage(
-                            model = it,
-                            contentDescription = "Focused image",
-                            contentScale = ContentScale.Fit
                         )
                     }
                 }
@@ -208,12 +180,10 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 )
             ),
-            focusedImage = null,
             onActionButtonClick = { _ -> },
             onShareButtonClick = { _ -> },
             onHeadlineClick = { _ -> },
-            onImageClick = { _ -> },
-            onCloseImageClick = {}
+            onImageClick = { _ -> }
         )
     }
 }
@@ -297,12 +267,10 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 )
             ),
-            focusedImage = "https://www.abc.es/xlsemanal/wp-content/uploads/sites/5/2023/08/libro-dan-lyons-poder-de-guardar-silecio-callarse-exito.a.jpg",
             onActionButtonClick = { _ -> },
             onShareButtonClick = { _ -> },
             onHeadlineClick = { _ -> },
-            onImageClick = { _ -> },
-            onCloseImageClick = {}
+            onImageClick = { _ -> }
         )
     }
 }
