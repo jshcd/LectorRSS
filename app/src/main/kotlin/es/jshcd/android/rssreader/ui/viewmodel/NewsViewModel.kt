@@ -42,7 +42,7 @@ class NewsViewModel: ViewModel() {
                 Request.Method.GET,
                 lFeedUrl,
                 { response ->
-                    parse(response)
+                    parse(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8))
                 },
                 { aError ->
                     onRequestError(aError)
