@@ -1,0 +1,47 @@
+[versions]
+
+android-application = "8.0.2"
+android-library = "8.0.2"
+androidx-activity-compose = "1.7.2"
+androidx-compose-bom = "2022.10.00"
+androidx-compose-material = "1.3.1"
+androidx-compose-ui-tooling-preview = "1.3.0"
+androidx-material-icons-extended = "1.4.3"
+androidx-navigation-compose = "2.5.3"
+androidx-test-espresso-core = "3.5.1"
+androidx-test-junit = "1.1.5"
+coil-compose = "2.4.0"
+core-ktx = "1.8.0"
+jetbrains-kotlin-android = "1.7.20"
+junit = "4.13.2"
+kotlin-bom = "1.8.0"
+lifecycle-runtime-ktx = "2.3.1"
+volley = "1.2.1"
+
+[libraries]
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidx-compose-bom"}
+androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "androidx-compose-material" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "androidx-compose-ui-tooling-preview" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx"}
+androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "androidx-material-icons-extended" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation-compose" }
+androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso-core" }
+androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+kotlin-bom = { group = "org.jetbrains.kotlin", name = "kotlin-bom", version.ref = "kotlin-bom"}
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-application" }
+android-library = { id = "com.android.library", version.ref = "android-library" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "jetbrains-kotlin-android" }
