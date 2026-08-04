@@ -3,13 +3,11 @@ package es.jshcd.android.rssreader.ui.viewmodel
 import android.util.Log
 import android.webkit.URLUtil
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import es.jshcd.android.rssreader.ui.state.SettingsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class SettingsViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(SettingsState())

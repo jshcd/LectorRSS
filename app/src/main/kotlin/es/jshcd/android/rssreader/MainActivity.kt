@@ -1,10 +1,9 @@
 package es.jshcd.android.rssreader
 
-import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -25,6 +24,7 @@ import es.jshcd.android.rssreader.ui.screen.SettingsScreen
 import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 import es.jshcd.android.rssreader.ui.viewmodel.NewsViewModel
 import es.jshcd.android.rssreader.ui.viewmodel.SettingsViewModel
+import androidx.core.net.toUri
 
 
 class MainActivity : ComponentActivity() {
@@ -97,7 +97,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             },
                             onHeadlineClick = { link ->
-                                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                                val browserIntent = Intent(Intent.ACTION_VIEW, link.toUri())
                                 startActivity(browserIntent)
                             },
                             onImageClick = {
@@ -139,8 +139,15 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val network = connectivityManager.activeNetwork ?: return false
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            connectivityManager.activeNetwork
+        } else {
+            connectivityManager.allNetworks.firstOrNull {
+                @Suppress("DEPRECATION")
+                connectivityManager.getNetworkInfo(it)?.isConnected == true
+            }
+        } ?: return false
         val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
         return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }

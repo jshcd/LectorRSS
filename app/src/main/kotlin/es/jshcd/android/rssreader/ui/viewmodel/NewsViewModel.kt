@@ -15,13 +15,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.xml.sax.InputSource
-import org.xml.sax.SAXException
-import java.io.IOException
 import java.io.StringReader
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
-
 
 class NewsViewModel: ViewModel() {
 
