@@ -1,6 +1,7 @@
 package es.jshcd.android.rssreader.ui.viewmodel
 
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.volley.Request
@@ -16,13 +17,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.xml.sax.InputSource
 import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.xml.parsers.DocumentBuilder
 import javax.xml.parsers.DocumentBuilderFactory
 
-class NewsViewModel: ViewModel() {
+class NewsViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewsState(emptyList()))
     val uiState: StateFlow<NewsState> = _uiState.asStateFlow()
+
+    private val rssDateFormat = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
 
     fun updateNews(
         isNetworkAvailable: Boolean,
@@ -36,41 +41,51 @@ class NewsViewModel: ViewModel() {
             return
         }
 
+        Log.d(TAG, "Updating news from ${lFeedUrls.size} sources")
+        
+        // Clear current news before starting a full refresh
         _uiState.update { it.copy(newsDtos = emptyList()) }
 
         lFeedUrls.forEach { url ->
-            lQueue.add(
-                StringRequest(
-                    Request.Method.GET,
-                    url,
-                    { response ->
-                        val news = parse(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8))
-                        _uiState.update { state ->
-                            val currentSize = state.newsDtos.size
-                            val newsWithUpdatedIds = news.mapIndexed { index, newsDto ->
-                                newsDto.copy(id = currentSize + index)
-                            }
-                            state.copy(newsDtos = state.newsDtos + newsWithUpdatedIds)
-                        }
-                    },
-                    { aError ->
-                        onRequestError(aError)
+            val request = StringRequest(
+                Request.Method.GET,
+                url,
+                { response ->
+                    val newsFromSource = parse(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8))
+                    Log.d(TAG, "Fetched ${newsFromSource.size} items from $url")
+                    
+                    _uiState.update { state ->
+                        // Combine, sort by date descending, and re-assign IDs
+                        val combined = (state.newsDtos + newsFromSource)
+                            .sortedByDescending { parseDate(it.pubDate) }
+                            .mapIndexed { index, item -> item.copy(id = index) }
+                        
+                        state.copy(newsDtos = combined)
                     }
-                )
+                },
+                { error ->
+                    Log.e(TAG, "Error fetching $url: ${error.message}")
+                    onRequestError(error)
+                }
             )
+            lQueue.add(request)
+        }
+    }
+
+    private fun parseDate(dateStr: String): Long {
+        return try {
+            rssDateFormat.parse(dateStr.trim())?.time ?: 0L
+        } catch (e: Exception) {
+            0L
         }
     }
 
     private fun parse(aXml: String): List<NewsDto> {
-        val stringReader = StringReader(aXml)
-        val inputSource = InputSource(stringReader)
-        val factory: DocumentBuilderFactory
-        val builder: DocumentBuilder
         val newsList = mutableListOf<NewsDto>()
         try {
-            factory = DocumentBuilderFactory.newInstance()
-            builder = factory.newDocumentBuilder()
-            val d = builder.parse(inputSource)
+            val factory = DocumentBuilderFactory.newInstance()
+            val builder = factory.newDocumentBuilder()
+            val d = builder.parse(InputSource(StringReader(aXml)))
             val nodeList = d.getElementsByTagName("item")
 
             for (i in 0 until nodeList.length) {
@@ -86,31 +101,31 @@ class NewsViewModel: ViewModel() {
 
                 for (j in 0 until childNodes.length) {
                     val mNode = childNodes.item(j)
-                    if (mNode.nodeName.compareTo("title") == 0) {
-                        title = mNode.textContent
-                    } else if (mNode.nodeName.compareTo("description") == 0) {
-                        description = mNode.textContent
-                    } else if (mNode.nodeName.compareTo("link") == 0) {
-                        link = mNode.textContent
-                    } else if (mNode.nodeName.compareTo("content:encoded") == 0) {
-                        content = mNode.textContent
-                    } else if (mNode.nodeName.compareTo("media:content") == 0) {
-                        val mediaContent = mNode.childNodes
-                        for (k in 0 until mediaContent.length) {
-                            val mediaItem = mediaContent.item(k)
-                            if (mediaItem.nodeName.compareTo("media:thumbnail") == 0) {
-                                val mediaItemAttributes = mediaItem.attributes
-                                val url = mediaItemAttributes.getNamedItem("url")
-                                imageUrl = url.textContent
+                    when (mNode.nodeName) {
+                        "title" -> title = mNode.textContent
+                        "description" -> description = mNode.textContent
+                        "link" -> link = mNode.textContent
+                        "content:encoded" -> content = mNode.textContent
+                        "pubDate" -> pubDate = mNode.textContent
+                        "media:content", "media:thumbnail" -> {
+                            val urlAttr = mNode.attributes?.getNamedItem("url")
+                            if (urlAttr != null) {
+                                imageUrl = urlAttr.textContent
+                            } else {
+                                // Check nested media:thumbnail
+                                val mediaChildren = mNode.childNodes
+                                for (k in 0 until mediaChildren.length) {
+                                    if (mediaChildren.item(k).nodeName == "media:thumbnail") {
+                                        imageUrl = mediaChildren.item(k).attributes?.getNamedItem("url")?.textContent ?: ""
+                                    }
+                                }
                             }
                         }
-                    } else if (mNode.nodeName == "pubDate") {
-                        pubDate = mNode.textContent
                     }
                 }
                 newsList.add(
                     NewsDto(
-                        id = i,
+                        id = 0, // ID will be set after sorting
                         title = title,
                         description = description,
                         link = link,
@@ -121,18 +136,16 @@ class NewsViewModel: ViewModel() {
                 )
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Log.e(TAG, "Parsing error: ${e.message}")
         }
         return newsList
     }
 
-    fun shareLink(
-        link: String,
-        onShareIntentReady: (Intent) -> Unit
-    ) {
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_TEXT, link)
+    fun shareLink(link: String, onShareIntentReady: (Intent) -> Unit) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, link)
+        }
         onShareIntentReady(shareIntent)
     }
 
@@ -140,5 +153,9 @@ class NewsViewModel: ViewModel() {
         viewModelScope.launch {
             _uiState.emit(uiState.value.copy(focusedNews = focusedIndex))
         }
+    }
+
+    companion object {
+        private const val TAG = "NewsViewModel"
     }
 }
