@@ -5,24 +5,24 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import es.jshcd.android.rssreader.R
@@ -39,16 +39,24 @@ fun ContactScreen(
         val startIndex = contactDescription.indexOf(email)
         if (startIndex != -1) {
             append(contactDescription.substring(0, startIndex))
-            pushStringAnnotation(tag = "URL", annotation = email)
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Blue,
-                    textDecoration = TextDecoration.Underline
-                )
-            ) {
+            
+            val link = LinkAnnotation.Clickable(
+                tag = "URL",
+                styles = TextLinkStyles(
+                    style = SpanStyle(
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline
+                    )
+                ),
+                linkInteractionListener = {
+                    onEmailClick(email)
+                }
+            )
+            
+            withLink(link) {
                 append(email)
             }
-            pop()
+            
             append(contactDescription.substring(startIndex + email.length))
         } else {
             append(contactDescription)
@@ -62,7 +70,7 @@ fun ContactScreen(
                 navigationIcon = {
                     IconButton(onClick = onArrowBackClick) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back"
                         )
                     }
@@ -78,15 +86,9 @@ fun ContactScreen(
                     .padding(paddingValues)
                     .padding(16.dp)
             ) {
-                ClickableText(
+                Text(
                     text = annotatedString,
-                    style = TextStyle(fontSize = 16.sp),
-                    onClick = { offset ->
-                        annotatedString.getStringAnnotations(tag = "URL", start = offset, end = offset)
-                            .firstOrNull()?.let { annotation ->
-                                onEmailClick(annotation.item)
-                            }
-                    }
+                    style = TextStyle(fontSize = 16.sp)
                 )
             }
         }
