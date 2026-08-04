@@ -86,6 +86,7 @@ class NewsViewModel : ViewModel() {
             val factory = DocumentBuilderFactory.newInstance()
             val builder = factory.newDocumentBuilder()
             val d = builder.parse(InputSource(StringReader(aXml)))
+            val channelTitle = d.getElementsByTagName("title").item(0).textContent
             val nodeList = d.getElementsByTagName("item")
 
             for (i in 0 until nodeList.length) {
@@ -125,6 +126,7 @@ class NewsViewModel : ViewModel() {
                 }
                 newsList.add(
                     NewsDto(
+                        channelTitle = channelTitle,
                         id = 0, // ID will be set after sorting
                         title = title,
                         description = description,

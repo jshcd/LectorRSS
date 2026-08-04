@@ -1,6 +1,7 @@
 package es.jshcd.android.rssreader.dto
 
 data class NewsDto(
+    val channelTitle: String,
     val id: Int,
     val title: String,
     val description: String,

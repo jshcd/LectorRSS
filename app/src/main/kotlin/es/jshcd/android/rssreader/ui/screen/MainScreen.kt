@@ -103,6 +103,7 @@ private fun GreetingPreview() {
         RSSReaderMain(
             headlines = listOf(
                 NewsDto(
+                    channelTitle = "LALIGA EA Sports // marca",
                     id = 1,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -112,6 +113,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 2,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -121,6 +123,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 3,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -130,6 +133,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 4,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -139,6 +143,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 5,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -148,6 +153,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 6,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -157,6 +163,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 7,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -166,6 +173,7 @@ private fun GreetingPreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 8,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -190,6 +198,7 @@ private fun GreetingWithFocusedImagePreview() {
         RSSReaderMain(
             headlines = listOf(
                 NewsDto(
+                    channelTitle = "El País",
                     id = 1,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -199,6 +208,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 2,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -208,6 +218,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 3,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -217,6 +228,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 4,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -226,6 +238,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 5,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -235,6 +248,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 6,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -244,6 +258,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 7,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",
@@ -253,6 +268,7 @@ private fun GreetingWithFocusedImagePreview() {
                     pubDate = "Sat, 26 Aug 2023 03:15:00 GMT"
                 ),
                 NewsDto(
+                    channelTitle = "El País",
                     id = 8,
                     title = "Reacciones, pactos y resultados del 23-J, en directo | Sánchez contesta a Feijóo que no se reunirá con él hasta que el Rey designe candidato a la investidura",
                     description = "EL PAÍS ofrece de forma gratuita la última hora de las reacciones al 23-J. Si quieres apoyar nuestro periodismo",

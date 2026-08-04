@@ -22,4 +22,5 @@
     <string name="confirm_delete_message">¿Está seguro de que desea borrar esta fuente de datos?</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
+    <string name="source">Fuente:</string>
 </resources>
