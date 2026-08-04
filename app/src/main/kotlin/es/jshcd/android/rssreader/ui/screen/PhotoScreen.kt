@@ -16,8 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import coil.compose.AsyncImage
+import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 
 @Composable
 fun PhotoScreen(
@@ -69,12 +70,14 @@ fun PhotoScreen(
     )
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun PhotoScreenPreview() {
-    PhotoScreen(
-        focusedImageTitle = "Titular",
-        focusedImage = "https://www.abc.es/xlsemanal/wp-content/uploads/sites/5/2023/08/libro-dan-lyons-poder-de-guardar-silecio-callarse-exito.a.jpg",
-        onArrowBackClick = { }
-    )
+    RSSReaderTheme {
+        PhotoScreen(
+            focusedImageTitle = "Titular",
+            focusedImage = "https://www.abc.es/xlsemanal/wp-content/uploads/sites/5/2023/08/libro-dan-lyons-poder-de-guardar-silecio-callarse-exito.a.jpg",
+            onArrowBackClick = { }
+        )
+    }
 }

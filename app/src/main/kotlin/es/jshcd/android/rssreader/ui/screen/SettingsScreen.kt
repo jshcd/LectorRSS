@@ -15,9 +15,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import es.jshcd.android.rssreader.R
 import es.jshcd.android.rssreader.ui.state.SettingsState
+import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 
 val borderPadding = 5.dp
 
@@ -74,4 +76,16 @@ fun SettingsScreen(
             }
         }
     )
+}
+
+@Composable
+@PreviewLightDark
+private fun SettingsScreenPreview() {
+    RSSReaderTheme {
+        SettingsScreen(
+            state = SettingsState(),
+            onValueChange = {},
+            onArrowBackClick = {}
+        )
+    }
 }

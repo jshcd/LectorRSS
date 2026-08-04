@@ -1,13 +1,6 @@
 package es.jshcd.android.rssreader.ui.screen
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
@@ -16,17 +9,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import es.jshcd.android.rssreader.R
 import es.jshcd.android.rssreader.dto.NewsDto
 import es.jshcd.android.rssreader.ui.ACTION_SETTINGS
@@ -90,18 +78,7 @@ fun RSSReaderMain(
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-private fun GreetingPreviewLight() {
-    GreetingPreview()
-}
-
-@Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-private fun GreetingPreviewDark() {
-    GreetingPreview()
-}
-
+@PreviewLightDark
 @Composable
 private fun GreetingPreview() {
     RSSReaderTheme {
@@ -188,7 +165,7 @@ private fun GreetingPreview() {
     }
 }
 
-@Preview
+@PreviewLightDark
 @Composable
 private fun GreetingWithFocusedImagePreview() {
     RSSReaderTheme {
