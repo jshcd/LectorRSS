@@ -50,28 +50,30 @@ class MainActivity : ComponentActivity() {
                     startDestination = ROUTE_MAIN
                 ) {
                     composable(ROUTE_MAIN) {
-                        newsViewModel.updateNews(
-                            isNetworkAvailable = isNetworkAvailable(),
-                            lFeedUrl = settingsUiState.value.dataSource,
-                            lQueue = requestQueue,
-                            onNoNetworkAvailable = {
-                                Toast.makeText(
-                                    applicationContext,
-                                    applicationContext.resources.getString(R.string.no_network_connection),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            },
-                            onRequestError = {
-                                Toast.makeText(
-                                    applicationContext,
-                                    getString(
-                                        R.string.request_failed,
-                                        it.networkResponse.toString()
-                                    ),
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        )
+                        androidx.compose.runtime.LaunchedEffect(settingsUiState.value.dataSources) {
+                            newsViewModel.updateNews(
+                                isNetworkAvailable = isNetworkAvailable(),
+                                lFeedUrls = settingsUiState.value.dataSources,
+                                lQueue = requestQueue,
+                                onNoNetworkAvailable = {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        applicationContext.resources.getString(R.string.no_network_connection),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                },
+                                onRequestError = {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        getString(
+                                            R.string.request_failed,
+                                            it.networkResponse.toString()
+                                        ),
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            )
+                        }
                         RSSReaderMain(
                             headlines = newsUiState.value.newsDtos,
                             onActionButtonClick = {
@@ -120,8 +122,11 @@ class MainActivity : ComponentActivity() {
                     composable(ROUTE_SETTINGS) {
                         SettingsScreen(
                             state = settingsUiState.value,
-                            onValueChange = {
-                                settingsViewModel.updateSetting(it)
+                            onAddClick = {
+                                settingsViewModel.addDataSource(it)
+                            },
+                            onDeleteClick = {
+                                settingsViewModel.removeDataSource(it)
                             },
                             onArrowBackClick = {
                                 navController.navigateUp()

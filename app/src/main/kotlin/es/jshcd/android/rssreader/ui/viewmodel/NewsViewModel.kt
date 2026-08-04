@@ -12,6 +12,7 @@ import es.jshcd.android.rssreader.ui.state.NewsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.xml.sax.InputSource
 import org.xml.sax.SAXException
@@ -29,46 +30,55 @@ class NewsViewModel: ViewModel() {
 
     fun updateNews(
         isNetworkAvailable: Boolean,
-        lFeedUrl: String,
+        lFeedUrls: List<String>,
         lQueue: RequestQueue,
         onNoNetworkAvailable: () -> Unit,
         onRequestError: (VolleyError) -> Unit
     ) {
         if (!isNetworkAvailable) {
             onNoNetworkAvailable()
+            return
         }
-        lQueue.add(
-            StringRequest(
-                Request.Method.GET,
-                lFeedUrl,
-                { response ->
-                    parse(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8))
-                },
-                { aError ->
-                    onRequestError(aError)
-                }
+
+        _uiState.update { it.copy(newsDtos = emptyList()) }
+
+        lFeedUrls.forEach { url ->
+            lQueue.add(
+                StringRequest(
+                    Request.Method.GET,
+                    url,
+                    { response ->
+                        val news = parse(String(response.toByteArray(Charsets.ISO_8859_1), Charsets.UTF_8))
+                        _uiState.update { state ->
+                            val currentSize = state.newsDtos.size
+                            val newsWithUpdatedIds = news.mapIndexed { index, newsDto ->
+                                newsDto.copy(id = currentSize + index)
+                            }
+                            state.copy(newsDtos = state.newsDtos + newsWithUpdatedIds)
+                        }
+                    },
+                    { aError ->
+                        onRequestError(aError)
+                    }
+                )
             )
-        )
+        }
     }
 
-    private fun parse(aXml: String) {
+    private fun parse(aXml: String): List<NewsDto> {
         val stringReader = StringReader(aXml)
         val inputSource = InputSource(stringReader)
         val factory: DocumentBuilderFactory
         val builder: DocumentBuilder
+        val newsList = mutableListOf<NewsDto>()
         try {
             factory = DocumentBuilderFactory.newInstance()
             builder = factory.newDocumentBuilder()
             val d = builder.parse(inputSource)
             val nodeList = d.getElementsByTagName("item")
-            // System.out.println("The feed has " + nodeList.getLength() +
-            // " items");
-
-            val newsList = mutableListOf<NewsDto>()
 
             for (i in 0 until nodeList.length) {
                 val nNode = nodeList.item(i)
-                var newsDto: NewsDto
                 val childNodes = nNode.childNodes
 
                 var title = ""
@@ -78,7 +88,6 @@ class NewsViewModel: ViewModel() {
                 var imageUrl = ""
                 var pubDate = ""
 
-                // System.out.println(childNodes.getLength());
                 for (j in 0 until childNodes.length) {
                     val mNode = childNodes.item(j)
                     if (mNode.nodeName.compareTo("title") == 0) {
@@ -90,8 +99,6 @@ class NewsViewModel: ViewModel() {
                     } else if (mNode.nodeName.compareTo("content:encoded") == 0) {
                         content = mNode.textContent
                     } else if (mNode.nodeName.compareTo("media:content") == 0) {
-                        //val attributes = mNode.attributes
-                        //val url = attributes.getNamedItem("url")
                         val mediaContent = mNode.childNodes
                         for (k in 0 until mediaContent.length) {
                             val mediaItem = mediaContent.item(k)
@@ -101,33 +108,26 @@ class NewsViewModel: ViewModel() {
                                 imageUrl = url.textContent
                             }
                         }
-
-                        // System.out.println(url.getTextContent());
                     } else if (mNode.nodeName == "pubDate") {
                         pubDate = mNode.textContent
                     }
                 }
-                newsDto = NewsDto(
-                    id = i,
-                    title = title,
-                    description = description,
-                    link = link,
-                    content = content,
-                    imageUrl = imageUrl,
-                    pubDate = pubDate
+                newsList.add(
+                    NewsDto(
+                        id = i,
+                        title = title,
+                        description = description,
+                        link = link,
+                        content = content,
+                        imageUrl = imageUrl,
+                        pubDate = pubDate
+                    )
                 )
-                newsList.add(newsDto)
             }
-            viewModelScope.launch {
-                _uiState.emit(uiState.value.copy(newsDtos = newsList))
-            }
-        } catch (e: SAXException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: ParserConfigurationException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
+        return newsList
     }
 
     fun shareLink(

@@ -8,28 +8,25 @@ import es.jshcd.android.rssreader.ui.state.SettingsState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class SettingsViewModel: ViewModel() {
     private val _uiState = MutableStateFlow(SettingsState())
     val uiState: StateFlow<SettingsState> = _uiState.asStateFlow()
 
-    fun updateSetting(rssURL: String) {
-        if (rssURL.isEmpty()) {
-            viewModelScope.launch {
-                _uiState.emit(SettingsState())
-            }
-            return
-        }
-
+    fun addDataSource(rssURL: String) {
         if (URLUtil.isValidUrl(rssURL)) {
-            viewModelScope.launch {
-                _uiState.emit(uiState.value.copy(dataSource = rssURL))
+            if (!_uiState.value.dataSources.contains(rssURL)) {
+                _uiState.update { it.copy(dataSources = it.dataSources + rssURL) }
             }
             return
         }
-
         Log.w(TAG, "Given URL is not valid: $rssURL")
+    }
+
+    fun removeDataSource(rssURL: String) {
+        _uiState.update { it.copy(dataSources = it.dataSources - rssURL) }
     }
 
     companion object {

@@ -12,4 +12,10 @@
     <string name="request_failed">Fallo en la solicitud: %1$s</string>
     <string name="share_link_using">Comparte enlace utilizando</string>
     <string name="close">Cerrar</string>
+    <string name="add">Añadir</string>
+    <string name="delete">Borrar</string>
+    <string name="confirm_delete_title">Confirmar borrado</string>
+    <string name="confirm_delete_message">¿Está seguro de que desea borrar esta fuente de datos?</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
 </resources>
