@@ -1,7 +1,10 @@
 package es.jshcd.android.rssreader.ui.screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -53,6 +56,7 @@ fun ContactScreen(
     }
 
     Scaffold(
+        modifier = Modifier.padding(WindowInsets.statusBars.asPaddingValues()),
         topBar = {
             TopAppBar(
                 navigationIcon = {

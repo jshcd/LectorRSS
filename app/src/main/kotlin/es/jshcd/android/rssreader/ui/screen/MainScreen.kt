@@ -1,7 +1,10 @@
 package es.jshcd.android.rssreader.ui.screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -35,6 +38,7 @@ fun RSSReaderMain(
 
     // A surface container using the 'background' color from the theme
     Scaffold(
+        modifier = Modifier.padding(WindowInsets.statusBars.asPaddingValues()),
         topBar = {
             TopAppBar(
                 title = {
