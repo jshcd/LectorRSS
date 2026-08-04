@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val newsViewModel = NewsViewModel()
-        val settingsViewModel = SettingsViewModel()
+        val settingsViewModel = SettingsViewModel(application)
 
         val requestQueue = Volley.newRequestQueue(applicationContext)
 
