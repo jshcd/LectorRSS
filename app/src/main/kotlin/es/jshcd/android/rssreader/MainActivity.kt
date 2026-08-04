@@ -3,6 +3,7 @@ package es.jshcd.android.rssreader
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -15,12 +16,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.volley.toolbox.Volley
 import es.jshcd.android.rssreader.ui.ACTION_SETTINGS
+import es.jshcd.android.rssreader.ui.ACTION_CONTACT
 import es.jshcd.android.rssreader.ui.ROUTE_MAIN
 import es.jshcd.android.rssreader.ui.ROUTE_PHOTO
 import es.jshcd.android.rssreader.ui.ROUTE_SETTINGS
+import es.jshcd.android.rssreader.ui.ROUTE_CONTACT
 import es.jshcd.android.rssreader.ui.screen.PhotoScreen
 import es.jshcd.android.rssreader.ui.screen.RSSReaderMain
 import es.jshcd.android.rssreader.ui.screen.SettingsScreen
+import es.jshcd.android.rssreader.ui.screen.ContactScreen
 import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 import es.jshcd.android.rssreader.ui.viewmodel.NewsViewModel
 import es.jshcd.android.rssreader.ui.viewmodel.SettingsViewModel
@@ -79,6 +83,7 @@ class MainActivity : ComponentActivity() {
                             onActionButtonClick = {
                                 when (it) {
                                     ACTION_SETTINGS -> navController.navigate(ROUTE_SETTINGS)
+                                    ACTION_CONTACT -> navController.navigate(ROUTE_CONTACT)
                                 }
                             },
                             onShareButtonClick = { link ->
@@ -130,6 +135,24 @@ class MainActivity : ComponentActivity() {
                             },
                             onArrowBackClick = {
                                 navController.navigateUp()
+                            }
+                        )
+                    }
+                    composable(ROUTE_CONTACT) {
+                        ContactScreen(
+                            onArrowBackClick = {
+                                navController.navigateUp()
+                            },
+                            onEmailClick = { email ->
+                                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                                    data = Uri.parse("mailto:$email")
+                                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.contact_email_subject))
+                                }
+                                try {
+                                    startActivity(intent)
+                                } catch (e: Exception) {
+                                    Toast.makeText(this@MainActivity, "No email app found", Toast.LENGTH_SHORT).show()
+                                }
                             }
                         )
                     }

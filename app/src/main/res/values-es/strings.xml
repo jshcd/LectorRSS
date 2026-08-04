@@ -12,6 +12,10 @@
     <string name="request_failed">Fallo en la solicitud: %1$s</string>
     <string name="share_link_using">Comparte enlace utilizando</string>
     <string name="close">Cerrar</string>
+    <string name="action_contact">Contacto</string>
+    <string name="contact_screen_title">Contacto</string>
+    <string name="contact_description">Para contactar con el desarrollador, por favor envíe un correo electrónico a %1$s</string>
+    <string name="contact_email_subject">[RSS Reader] Contacto</string>
     <string name="add">Añadir</string>
     <string name="delete">Borrar</string>
     <string name="confirm_delete_title">Confirmar borrado</string>

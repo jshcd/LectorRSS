@@ -9,6 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import es.jshcd.android.rssreader.R
 import es.jshcd.android.rssreader.dto.NewsDto
 import es.jshcd.android.rssreader.ui.ACTION_SETTINGS
+import es.jshcd.android.rssreader.ui.ACTION_CONTACT
 import es.jshcd.android.rssreader.ui.screen.components.HeadlineRow
 import es.jshcd.android.rssreader.ui.theme.RSSReaderTheme
 
@@ -39,6 +41,18 @@ fun RSSReaderMain(
                     Text(text = stringResource(id = R.string.app_name))
                 },
                 actions = {
+                    IconButton(
+                        onClick = {
+                            onActionButtonClick(ACTION_CONTACT)
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Email,
+                            contentDescription = stringResource(
+                                id = R.string.action_contact
+                            )
+                        )
+                    }
                     IconButton(
                         onClick = {
                             onActionButtonClick(ACTION_SETTINGS)
